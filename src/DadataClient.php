@@ -1,18 +1,22 @@
 <?php
 
-namespace Dadata;
+declare(strict_types=1);
+
+namespace MagDv\Dadata;
+
+use MagDv\Dadata\Interfaces\DadataClientConfigInterface;
 
 class DadataClient
 {
-    private $cleaner;
-    private $profile;
-    private $suggestions;
+    private CleanClient $cleaner;
+    private ProfileClient $profile;
+    private SuggestClient $suggestions;
 
-    public function __construct($token, $secret)
+    public function __construct(DadataClientConfigInterface $dadataClientConfig)
     {
-        $this->cleaner = new CleanClient($token, $secret);
-        $this->profile = new ProfileClient($token, $secret);
-        $this->suggestions = new SuggestClient($token, $secret);
+        $this->cleaner = new CleanClient($dadataClientConfig);
+        $this->profile = new ProfileClient($dadataClientConfig);
+        $this->suggestions = new SuggestClient($dadataClientConfig);
     }
 
     public function clean($name, $value)

@@ -11,22 +11,57 @@ Thin PHP wrapper over Dadata API.
 ## Installation
 
 ```sh
-composer require hflabs/dadata
+composer require magdv/dadata
 ```
 
 Requirements:
 
--   PHP 5.6+
--   Guzzle 6 or 7
+-   PHP 7.4
+-   PSR Client 7
 
 ## Usage
 
 Create API client instance:
 
 ```php
+
+// Create your class implemented interface DadataClientConfigInterface
+ 
+class DadataConfig implements DadataClientConfigInterface
+{
+
+    private string $token;
+    private string $secret;
+
+    public function __construct(string $token, string $secret)
+    {
+        $this->token = $token;
+        $this->secret = $secret;
+    }
+
+    public function getClient(string $baseUrl): ClientInterface
+    {
+         $headers = [
+            "Content-Type" => "application/json",
+            "Accept" => "application/json",
+            "Authorization" => "Token " . $this->token,
+        ];
+
+        $headers["X-Secret"] = $this->secret;
+
+        return new Client([
+            "base_uri" => $baseUrl,
+            "headers" => $headers,
+            "timeout" => Settings::TIMEOUT_SEC
+        ]);
+    }
+}
+
+
 > $token = "Replace with Dadata API key";
 > $secret = "Replace with Dadata secret key";
-> $dadata = new \Dadata\DadataClient($token, $secret);
+> $config = new DadataConfig($token $secret);
+> $dadata = new \Magdv\DadataClient($token, $config);
 ```
 
 Then call API methods as specified below.

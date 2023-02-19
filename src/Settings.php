@@ -1,9 +1,11 @@
 <?php
 
-namespace Dadata;
+declare(strict_types=1);
+
+namespace MagDv\Dadata;
 
 class Settings
 {
-    const SUGGESTION_COUNT = 5;
-    const TIMEOUT_SEC = 3;
+    public const SUGGESTION_COUNT = 5;
+    public const TIMEOUT_SEC = 3;
 }

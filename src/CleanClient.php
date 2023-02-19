@@ -1,20 +1,24 @@
 <?php
 
-namespace Dadata;
+declare(strict_types=1);
+
+namespace MagDv\Dadata;
+
+use MagDv\Dadata\Interfaces\DadataClientConfigInterface;
 
 class CleanClient extends ClientBase
 {
-    const BASE_URL = "https://cleaner.dadata.ru/api/v1/";
+    public const BASE_URL = "https://cleaner.dadata.ru/api/v1/";
 
-    public function __construct($token, $secret)
+    public function __construct(DadataClientConfigInterface $dadataClientConfig)
     {
-        parent::__construct(self::BASE_URL, $token, $secret);
+        parent::__construct(self::BASE_URL, $dadataClientConfig);
     }
 
     public function clean($name, $value)
     {
         $url = "clean/$name";
-        $fields = array($value);
+        $fields = [$value];
         $response = $this->post($url, $fields);
         return $response[0];
     }

@@ -1,40 +1,41 @@
 <?php
 
-namespace Dadata;
+declare(strict_types=1);
+
+namespace MagDv\Dadata;
 
 use DateTime;
+use MagDv\Dadata\Interfaces\DadataClientConfigInterface;
 
 class ProfileClient extends ClientBase
 {
-    const BASE_URL = "https://dadata.ru/api/v2/";
+    public const BASE_URL = "https://dadata.ru/api/v2/";
 
-    public function __construct($token, $secret)
+    public function __construct(DadataClientConfigInterface $dadataClientConfig)
     {
-        parent::__construct(self::BASE_URL, $token, $secret);
+        parent::__construct(self::BASE_URL, $dadataClientConfig);
     }
 
-    public function getBalance()
+    public function getBalance(): string
     {
         $url = "profile/balance";
         $response = $this->get($url);
-        return $response["balance"];
+        return (string)$response["balance"];
     }
 
-    public function getDailyStats($date = null)
+    public function getDailyStats($date = null): array
     {
         $url = "stat/daily";
         if (!$date) {
             $date = new DateTime();
         }
         $query = ["date" => $date->format("Y-m-d")];
-        $response = $this->get($url, $query);
-        return $response;
+        return $this->get($url, $query);
     }
 
-    public function getVersions()
+    public function getVersions(): array
     {
         $url = "version";
-        $response = $this->get($url);
-        return $response;
+        return $this->get($url);
     }
 }

@@ -1,39 +1,72 @@
 <?php
 
-namespace Dadata;
+declare(strict_types=1);
+
+namespace MagDv\Dadata;
+
+use MagDv\Dadata\Exception\DadataApiException;
+use MagDv\Dadata\Interfaces\DadataClientConfigInterface;
+use Nyholm\Psr7\Request;
+use Nyholm\Psr7\Uri;
+use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\ResponseInterface;
 
 abstract class ClientBase
 {
-    public $client;
+    private ClientInterface $client;
 
-    public function __construct($baseUrl, $token, $secret = null)
+    public function __construct($baseUrl, DadataClientConfigInterface $dadataClientConfig)
     {
-        $headers = [
-            "Content-Type" => "application/json",
-            "Accept" => "application/json",
-            "Authorization" => "Token " . $token,
-        ];
-        if ($secret) {
-            $headers["X-Secret"] = $secret;
+        $this->client = $dadataClientConfig->getClient($baseUrl);
+    }
+
+    protected function get($url, $query = []): array
+    {
+        $uri = new Uri($url . ($query ? '?' . http_build_query($query) : ''));
+
+        $req = new Request(
+            'GET',
+            $uri,
+        );
+
+        try {
+            $response = $this->client->sendRequest($req);
+        } catch (ClientExceptionInterface $clientException) {
+            throw new DadataApiException('Dadata client exception: ' . $clientException->getMessage(), $clientException->getCode(), $clientException);
         }
-        $this->client = new \GuzzleHttp\Client([
-            "base_uri" => $baseUrl,
-            "headers" => $headers,
-            "timeout" => Settings::TIMEOUT_SEC
-        ]);
+
+        if (!$this->isOk($response)) {
+            throw new DadataApiException($response->getBody()->getContents());
+        }
+
+        return json_decode($response->getBody()->getContents(), true);
     }
 
-    protected function get($url, $query = [])
+    protected function post($url, $data): array
     {
-        $response = $this->client->get($url, ["query" => $query]);
-        return json_decode($response->getBody(), true);
+        $req = new Request(
+            'POST',
+            $url,
+            [],
+            json_encode($data)
+        );
+
+        try {
+            $response = $this->client->sendRequest($req);
+        } catch (ClientExceptionInterface $clientException) {
+            throw new DadataApiException('Dadata client exception: ' . $clientException->getMessage(), $clientException->getCode(), $clientException);
+        }
+
+        if (!$this->isOk($response)) {
+            throw new DadataApiException($response->getBody()->getContents());
+        }
+
+        return json_decode($response->getBody()->getContents(), true);
     }
 
-    protected function post($url, $data)
+    public function isOk(ResponseInterface $response): bool
     {
-        $response = $this->client->post($url, [
-            "json" => $data
-        ]);
-        return json_decode($response->getBody(), true);
+        return $response->getStatusCode() >= 200 && $response->getStatusCode() < 300;
     }
 }
