@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace MagDv\Dadata;
 
+use MagDv\Dadata\Interfaces\CleanClientInterface;
 use MagDv\Dadata\Interfaces\DadataClientConfigInterface;
 
-class CleanClient extends ClientBase
+class CleanClient extends ClientBase implements CleanClientInterface
 {
     public const BASE_URL = "https://cleaner.dadata.ru/api/v1/";
 
@@ -15,7 +16,7 @@ class CleanClient extends ClientBase
         parent::__construct(self::BASE_URL, $dadataClientConfig);
     }
 
-    public function clean($name, $value)
+    public function clean(string $name, string $value): array
     {
         $url = "clean/$name";
         $fields = [$value];
@@ -23,7 +24,7 @@ class CleanClient extends ClientBase
         return $response[0];
     }
 
-    public function cleanRecord($structure, $record)
+    public function cleanRecord(array $structure, array $record): array
     {
         $url = "clean";
         $data = [

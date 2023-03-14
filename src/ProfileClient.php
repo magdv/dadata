@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MagDv\Dadata;
 
-use DateTime;
 use MagDv\Dadata\Interfaces\DadataClientConfigInterface;
+use MagDv\Dadata\Interfaces\ProfileClientInterface;
 
-class ProfileClient extends ClientBase
+class ProfileClient extends ClientBase implements ProfileClientInterface
 {
     public const BASE_URL = "https://dadata.ru/api/v2/";
 
@@ -23,11 +23,11 @@ class ProfileClient extends ClientBase
         return (string)$response["balance"];
     }
 
-    public function getDailyStats($date = null): array
+    public function getDailyStats(\DateTimeImmutable $date = null): array
     {
         $url = "stat/daily";
         if (!$date) {
-            $date = new DateTime();
+            $date = new \DateTimeImmutable();
         }
         $query = ["date" => $date->format("Y-m-d")];
         return $this->get($url, $query);
