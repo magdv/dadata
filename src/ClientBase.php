@@ -16,12 +16,12 @@ abstract class ClientBase
 {
     private ClientInterface $client;
 
-    public function __construct($baseUrl, DadataClientConfigInterface $dadataClientConfig)
+    public function __construct(string $baseUrl, DadataClientConfigInterface $dadataClientConfig)
     {
         $this->client = $dadataClientConfig->getClient($baseUrl);
     }
 
-    protected function get($url, $query = []): array
+    protected function get(string $url, array $query = []): array
     {
         $uri = new Uri($url . ($query ? '?' . http_build_query($query) : ''));
 
@@ -43,7 +43,7 @@ abstract class ClientBase
         return json_decode($response->getBody()->getContents(), true);
     }
 
-    protected function post($url, $data): array
+    protected function post(string $url, array $data): array
     {
         $req = new Request(
             'POST',
