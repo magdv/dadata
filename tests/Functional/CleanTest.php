@@ -120,6 +120,12 @@ final class CleanTest extends BaseTest
             'qc' => 0,
             'unparsed_parts' => null,
             'metro' => null,
+            'stead_fias_id' => null,
+            'stead_kladr_id' => null,
+            'stead_cadnum' => null,
+            'stead_type' => null,
+            'stead_type_full' => null,
+            'stead' => null,
         ];
         $this->assertEquals($expected, $actual);
     }
