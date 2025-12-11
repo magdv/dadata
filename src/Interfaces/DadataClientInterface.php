@@ -20,7 +20,7 @@ interface DadataClientInterface
 
     public function getBalance(): string;
 
-    public function getDailyStats(\DateTimeImmutable $date = null): array;
+    public function getDailyStats(?\DateTimeImmutable $date = null): array;
 
     public function getVersions(): array;
 

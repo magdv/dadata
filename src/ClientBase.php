@@ -23,7 +23,7 @@ abstract class ClientBase
 
     protected function get(string $url, array $query = []): array
     {
-        $uri = new Uri($url . ($query ? '?' . http_build_query($query) : ''));
+        $uri = new Uri($url . ($query !== [] ? '?' . http_build_query($query) : ''));
 
         $req = new Request(
             'GET',
