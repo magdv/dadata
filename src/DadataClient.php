@@ -10,7 +10,9 @@ use MagDv\Dadata\Interfaces\DadataClientInterface;
 class DadataClient implements DadataClientInterface
 {
     private CleanClient $cleaner;
+
     private ProfileClient $profile;
+
     private SuggestClient $suggestions;
 
     public function __construct(DadataClientConfigInterface $dadataClientConfig)
@@ -50,7 +52,7 @@ class DadataClient implements DadataClientInterface
         return $this->profile->getBalance();
     }
 
-    public function getDailyStats(\DateTimeImmutable $date = null): array
+    public function getDailyStats(?\DateTimeImmutable $date = null): array
     {
         return $this->profile->getDailyStats($date);
     }

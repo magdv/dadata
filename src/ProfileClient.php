@@ -16,21 +16,22 @@ class ProfileClient extends ClientBase implements ProfileClientInterface
         parent::__construct(self::BASE_URL, $dadataClientConfig);
     }
 
+    public function getDailyStats(?\DateTimeImmutable $date = null): array
+    {
+        $url = "stat/daily";
+        if (!$date instanceof \DateTimeImmutable) {
+            $date = new \DateTimeImmutable();
+        }
+
+        $query = ["date" => $date->format("Y-m-d")];
+        return $this->get($url, $query);
+    }
+
     public function getBalance(): string
     {
         $url = "profile/balance";
         $response = $this->get($url);
         return (string)$response["balance"];
-    }
-
-    public function getDailyStats(\DateTimeImmutable $date = null): array
-    {
-        $url = "stat/daily";
-        if (!$date) {
-            $date = new \DateTimeImmutable();
-        }
-        $query = ["date" => $date->format("Y-m-d")];
-        return $this->get($url, $query);
     }
 
     public function getVersions(): array

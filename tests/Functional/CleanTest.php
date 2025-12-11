@@ -7,6 +7,7 @@ use MagDv\Dadata\CleanClient;
 final class CleanTest extends BaseTest
 {
     private ?CleanClient $api = null;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -110,8 +111,8 @@ final class CleanTest extends BaseTest
             'tax_office' => '7700',
             'tax_office_legal' => '7700',
             'timezone' => 'UTC+3',
-            'geo_lat' => '55.7540471',
-            'geo_lon' => '37.620405',
+            'geo_lat' => '55.7540584',
+            'geo_lon' => '37.62049',
             'beltway_hit' => null,
             'beltway_distance' => null,
             'qc_geo' => 4,
@@ -126,6 +127,13 @@ final class CleanTest extends BaseTest
             'stead_type' => null,
             'stead_type_full' => null,
             'stead' => null,
+            'house_flat_count' => null,
+            'room_type' => null,
+            'room_type_full' => null,
+            'room' => null,
+            'geoname_id' => '524901',
+            'divisions' => null,
+
         ];
         $this->assertEquals($expected, $actual);
     }

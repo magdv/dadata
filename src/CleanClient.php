@@ -18,7 +18,7 @@ class CleanClient extends ClientBase implements CleanClientInterface
 
     public function clean(string $name, string $value): array
     {
-        $url = "clean/$name";
+        $url = 'clean/' . $name;
         $fields = [$value];
         $response = $this->post($url, $fields);
         return $response[0];

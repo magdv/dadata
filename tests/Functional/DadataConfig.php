@@ -13,6 +13,7 @@ class DadataConfig implements DadataClientConfigInterface
 {
 
     private string $token;
+
     private string $secret;
 
     public function __construct(string $token, string $secret)
